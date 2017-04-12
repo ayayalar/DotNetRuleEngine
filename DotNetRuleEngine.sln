@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetRuleEngine", "DotNetR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetRuleEngine.Interface", "DotNetRuleEngine.Interface\DotNetRuleEngine.Interface.csproj", "{046BFCD7-F4A0-46BF-A7C9-2FBF000D5110}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "README", "README", "{B9ED80C8-10FF-45CB-A894-245501501A91}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotnetRuleEngine.Test", "DotnetRuleEngine.Test\DotnetRuleEngine.Test.csproj", "{51984223-2AD7-4036-9FF0-9A98166C5582}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +28,10 @@ Global
 		{046BFCD7-F4A0-46BF-A7C9-2FBF000D5110}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{046BFCD7-F4A0-46BF-A7C9-2FBF000D5110}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{046BFCD7-F4A0-46BF-A7C9-2FBF000D5110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51984223-2AD7-4036-9FF0-9A98166C5582}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51984223-2AD7-4036-9FF0-9A98166C5582}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51984223-2AD7-4036-9FF0-9A98166C5582}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51984223-2AD7-4036-9FF0-9A98166C5582}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
