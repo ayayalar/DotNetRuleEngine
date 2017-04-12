@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetRuleEngine", "DotNetRuleEngine\DotNetRuleEngine.csproj", "{D796BD84-82FD-453C-9488-747BDD7204EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetRuleEngine.Interface", "DotNetRuleEngine.Interface\DotNetRuleEngine.Interface.csproj", "{046BFCD7-F4A0-46BF-A7C9-2FBF000D5110}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D796BD84-82FD-453C-9488-747BDD7204EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D796BD84-82FD-453C-9488-747BDD7204EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D796BD84-82FD-453C-9488-747BDD7204EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D796BD84-82FD-453C-9488-747BDD7204EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{046BFCD7-F4A0-46BF-A7C9-2FBF000D5110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{046BFCD7-F4A0-46BF-A7C9-2FBF000D5110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{046BFCD7-F4A0-46BF-A7C9-2FBF000D5110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{046BFCD7-F4A0-46BF-A7C9-2FBF000D5110}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

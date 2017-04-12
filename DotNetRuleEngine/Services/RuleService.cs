@@ -1,0 +1,126 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DotNetRuleEngine.Extensions;
+using DotNetRuleEngine.Interface;
+using DotNetRuleEngine.Models;
+
+namespace DotNetRuleEngine.Services
+{
+    internal class RuleService<T> where T : class, new()
+    {
+        private readonly T _model;
+        private readonly IList<IRule<T>> _rules;
+        private readonly IRuleEngineConfiguration<T> _ruleEngineConfiguration;
+        private readonly RxRuleService<IRule<T>, T> _rxRuleService;
+        private readonly ICollection<IRuleResult> _ruleResults = new List<IRuleResult>();
+
+        public RuleService(T model, IList<IRule<T>> rules,
+            IRuleEngineConfiguration<T> ruleEngineConfiguration)
+        {
+            _model = model;
+            _rules = rules;
+            _rxRuleService = new RxRuleService<IRule<T>, T>(_rules);
+            _ruleEngineConfiguration = ruleEngineConfiguration;
+        }
+
+        public void Invoke() => Execute(_rxRuleService.FilterRxRules(_rules));
+
+        public IRuleResult[] GetRuleResults() => _ruleResults.ToArray();
+
+        private void Execute(IList<IRule<T>> rules)
+        {
+            foreach (var rule in OrderByExecutionOrder(rules))
+            {
+                InvokeNestedRules(rule.Configuration.InvokeNestedRulesFirst, rule);
+
+                if (rule.CanInvoke(_model, _ruleEngineConfiguration.IsRuleEngineTerminated()))
+                {
+                    InvokePreactiveRules(rule);
+
+                    try
+                    {
+                        //TraceMessage.Verbose(rule, TraceMessage.BeforeInvoke);
+                        rule.BeforeInvoke();
+
+                        //TraceMessage.Verbose(rule, TraceMessage.Invoke);
+                        var ruleResult = rule.Invoke();
+
+                        //TraceMessage.Verbose(rule, TraceMessage.AfterInvoke);
+                        rule.AfterInvoke();
+
+                        AddToRuleResults(ruleResult, rule.GetType().Name);
+                    }
+
+                    catch (Exception exception)
+                    {
+                        rule.UnhandledException = exception;
+                        if (_rxRuleService.GetExceptionRules().ContainsKey(rule.GetType()))
+                        {
+                            InvokeExceptionRules(rule);
+                        }
+                        else
+                        {
+                            throw;
+                        }                        
+                    }                   
+
+                    rule.UpdateRuleEngineConfiguration(_ruleEngineConfiguration);
+
+                    InvokeReactiveRules(rule);
+                }
+
+                InvokeNestedRules(!rule.Configuration.InvokeNestedRulesFirst, rule);
+            }
+        }
+
+        private void InvokeReactiveRules(IGeneralRule<T> rule)
+        {
+            if (_rxRuleService.GetReactiveRules().ContainsKey(rule.GetType()))
+            {
+                Execute(_rxRuleService.GetReactiveRules()[rule.GetType()].ToList());
+            }
+        }
+
+        private void InvokePreactiveRules(IRule<T> rule)
+        {
+            if (_rxRuleService.GetPreactiveRules().ContainsKey(rule.GetType()))
+            {
+                Execute(_rxRuleService.GetPreactiveRules()[rule.GetType()].ToList());
+            }
+        }
+
+        private void InvokeExceptionRules(IRule<T> rule)
+        {
+            var exceptionRules = _rxRuleService.GetExceptionRules()[rule.GetType()]
+                .Select(r =>
+                {
+                    r.UnhandledException = rule.UnhandledException;
+                    return r;
+                });
+
+            Execute(exceptionRules.ToList());
+        }
+
+        private void AddToRuleResults(IRuleResult ruleResult, string ruleName)
+        {
+            ruleResult.AssignRuleName(ruleName);
+            if (ruleResult != null) _ruleResults.Add(ruleResult);
+        }
+
+        private void InvokeNestedRules(bool invokeNestedRules, IRule<T> rule)
+        {
+            if (invokeNestedRules && rule.IsNested)
+            {
+                Execute(_rxRuleService.FilterRxRules(OrderByExecutionOrder(rule.GetRules().OfType<IRule<T>>().ToList())));
+            }
+        }
+
+        private static IList<IRule<T>> OrderByExecutionOrder(IList<IRule<T>> rules)
+        {
+            return Enumerable.OfType<IRule<T>>(rules.GetRulesWithExecutionOrder())
+                .Concat(Enumerable.OfType<IRule<T>>(rules.GetRulesWithoutExecutionOrder()))
+                .ToList();
+        }
+    }
+}
