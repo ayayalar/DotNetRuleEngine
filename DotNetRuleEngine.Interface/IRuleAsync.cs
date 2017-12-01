@@ -6,6 +6,8 @@ namespace DotNetRuleEngine.Interface
     {
         bool IsParallel { get; set; }
 
+        IParellelConfiguration<T> ParellelConfiguration { get; set; }
+
         Task InitializeAsync();
 
         Task BeforeInvokeAsync();

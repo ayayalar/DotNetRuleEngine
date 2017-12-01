@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DotNetRuleEngine.Extensions;
 using DotNetRuleEngine.Interface;
-using DotNetRuleEngine.Models;
 
 namespace DotNetRuleEngine.Services
 {
@@ -40,13 +39,8 @@ namespace DotNetRuleEngine.Services
 
                     try
                     {
-                        //TraceMessage.Verbose(rule, TraceMessage.BeforeInvoke);
                         rule.BeforeInvoke();
-
-                        //TraceMessage.Verbose(rule, TraceMessage.Invoke);
                         var ruleResult = rule.Invoke();
-
-                        //TraceMessage.Verbose(rule, TraceMessage.AfterInvoke);
                         rule.AfterInvoke();
 
                         AddToRuleResults(ruleResult, rule.GetType().Name);
@@ -61,9 +55,19 @@ namespace DotNetRuleEngine.Services
                         }
                         else
                         {
-                            throw;
-                        }                        
-                    }                   
+                            var globalExceptionHandler = _rules.GetGlobalExceptionHandler();
+
+                            if (globalExceptionHandler is IRule<T>)
+                            {
+                                globalExceptionHandler.UnhandledException = exception;
+                                Execute(new List<IRule<T>> { (IRule<T>)globalExceptionHandler });
+                            }
+                            else
+                            {
+                                throw;
+                            }                            
+                        }
+                    }
 
                     rule.UpdateRuleEngineConfiguration(_ruleEngineConfiguration);
 
@@ -118,8 +122,8 @@ namespace DotNetRuleEngine.Services
 
         private static IList<IRule<T>> OrderByExecutionOrder(IList<IRule<T>> rules)
         {
-            return Enumerable.OfType<IRule<T>>(rules.GetRulesWithExecutionOrder())
-                .Concat(Enumerable.OfType<IRule<T>>(rules.GetRulesWithoutExecutionOrder()))
+            return rules.GetRulesWithExecutionOrder().OfType<IRule<T>>()
+                .Concat(rules.GetRulesWithoutExecutionOrder().OfType<IRule<T>>())
                 .ToList();
         }
     }

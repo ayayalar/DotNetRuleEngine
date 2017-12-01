@@ -16,6 +16,8 @@ namespace DotNetRuleEngine
 
         public bool IsParallel { get; set; }
 
+        public IParellelConfiguration<T> ParellelConfiguration { get; set; } = new ParallelConfiguration<T>();
+
         public bool IsNested => Rules.Any();
 
         public bool IsReactive { get; set; }
@@ -25,6 +27,8 @@ namespace DotNetRuleEngine
         public Type ObserveRule { get; set; }
 
         public bool IsExceptionHandler { get; set; }
+
+        public bool IsGlobalExceptionHandler { get; set; }  
 
         public Exception UnhandledException { get; set; }
 

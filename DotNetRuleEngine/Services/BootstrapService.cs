@@ -83,6 +83,23 @@ namespace DotNetRuleEngine.Services
                 rule.Configuration.NestedRulesInheritConstraint = true;
             }
 
+            if (rule is RuleAsync<T> parallelRule && parallelRule.IsParallel &&
+                nestingRule is RuleAsync<T> nestingParallelRule)
+            {
+                if (nestingParallelRule.ParellelConfiguration != null &&
+                    nestingParallelRule.ParellelConfiguration.NestedParallelRulesInherit)
+                {
+                    var cancellationTokenSource = parallelRule.ParellelConfiguration.CancellationTokenSource;
+                    parallelRule.ParellelConfiguration = new ParallelConfiguration<T>
+                    {
+                        NestedParallelRulesInherit = true,
+                        CancellationTokenSource = cancellationTokenSource,
+                        TaskCreationOptions = nestingParallelRule.ParellelConfiguration.TaskCreationOptions,
+                        TaskScheduler = nestingParallelRule.ParellelConfiguration.TaskScheduler
+                    };
+                }
+            }
+
             rule.Resolve = _dependencyResolver;
         }
 
@@ -90,9 +107,7 @@ namespace DotNetRuleEngine.Services
         {
             var resolvedRule = default(TK);
 
-            var type = ruleObject as Type;
-
-            if (type != null)
+            if (ruleObject is Type type)
             {
                 resolvedRule = _dependencyResolver.GetService(type) as TK;
 

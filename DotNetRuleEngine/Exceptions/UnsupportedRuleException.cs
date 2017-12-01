@@ -16,4 +16,19 @@ namespace DotNetRuleEngine.Exceptions
         {
         }
     }
+
+    public class GlobalHandlerException : Exception
+    {
+        public GlobalHandlerException()
+        {
+        }
+
+        public GlobalHandlerException(string message) : base(message)
+        {
+        }
+
+        public GlobalHandlerException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+    }
 }

@@ -15,6 +15,8 @@ namespace DotNetRuleEngine.Interface
 
         bool IsExceptionHandler { get; set; }
 
+        bool IsGlobalExceptionHandler { get; set; }
+
         Type ObserveRule { get; }
 
         Exception UnhandledException { get; set; }

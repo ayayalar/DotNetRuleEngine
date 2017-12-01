@@ -31,7 +31,7 @@ namespace DotNetRuleEngine.Services
 
         public IList<TK> FilterRxRules(IList<TK> rules)
         {
-            return rules.Where(r => !r.IsReactive && !r.IsPreactive && !r.IsExceptionHandler).ToList();
+            return rules.Where(r => !r.IsReactive && !r.IsPreactive && !r.IsExceptionHandler && !r.IsGlobalExceptionHandler).ToList();
         }
 
         private ConcurrentDictionary<Type, IList<TK>> CreatePreactiveRules()
