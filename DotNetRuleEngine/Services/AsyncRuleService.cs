@@ -123,7 +123,7 @@ namespace DotNetRuleEngine.Services
                             {
                                 var globalExceptionHandler = _rules.GetGlobalExceptionHandler();
 
-                                if (globalExceptionHandler is IRule<T>)
+                                if (globalExceptionHandler is IRuleAsync<T>)
                                 {
                                     globalExceptionHandler.UnhandledException = exception;
                                     await ExecuteAsyncRules(new List<IRuleAsync<T>> { (IRuleAsync<T>)globalExceptionHandler });
