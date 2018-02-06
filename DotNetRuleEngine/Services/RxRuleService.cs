@@ -10,34 +10,34 @@ namespace DotNetRuleEngine.Services
     internal sealed class RxRuleService<TK, T> where T : class, new() where TK : IGeneralRule<T>
     {
         private readonly IList<TK> _rules;
-        private readonly Lazy<ConcurrentDictionary<Type, IList<TK>>> _preactiveRules;
+        private readonly Lazy<ConcurrentDictionary<Type, IList<TK>>> _proactiveRules;
         private readonly Lazy<ConcurrentDictionary<Type, IList<TK>>> _reactiveRules;
         private readonly Lazy<ConcurrentDictionary<Type, IList<TK>>> _exceptionRules;
 
         public RxRuleService(IList<TK> rules)
         {
             _rules = rules;
-            _preactiveRules = new Lazy<ConcurrentDictionary<Type, IList<TK>>>(CreatePreactiveRules, true);
+            _proactiveRules = new Lazy<ConcurrentDictionary<Type, IList<TK>>>(CreateProactiveRules, true);
             _reactiveRules = new Lazy<ConcurrentDictionary<Type, IList<TK>>>(CreateReactiveRules, true);
             _exceptionRules = new Lazy<ConcurrentDictionary<Type, IList<TK>>>(CreateExceptionRules, true);
         }
 
         public ConcurrentDictionary<Type, IList<TK>> GetReactiveRules() => _reactiveRules.Value;
 
-        public ConcurrentDictionary<Type, IList<TK>> GetPreactiveRules() => _preactiveRules.Value;
+        public ConcurrentDictionary<Type, IList<TK>> GetProactiveRules() => _proactiveRules.Value;
 
         public ConcurrentDictionary<Type, IList<TK>> GetExceptionRules() => _exceptionRules.Value;
 
 
         public IList<TK> FilterRxRules(IList<TK> rules)
         {
-            return rules.Where(r => !r.IsReactive && !r.IsPreactive && !r.IsExceptionHandler && !r.IsGlobalExceptionHandler).ToList();
+            return rules.Where(r => !r.IsReactive && !r.IsProactive && !r.IsExceptionHandler && !r.IsGlobalExceptionHandler).ToList();
         }
 
-        private ConcurrentDictionary<Type, IList<TK>> CreatePreactiveRules()
+        private ConcurrentDictionary<Type, IList<TK>> CreateProactiveRules()
         {
             var rxRules = new ConcurrentDictionary<Type, IList<TK>>();
-            GetRxRules(_rules, rxRules, rule => rule.IsPreactive);
+            GetRxRules(_rules, rxRules, rule => rule.IsProactive);
 
             return rxRules;
         }

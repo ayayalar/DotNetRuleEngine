@@ -11,7 +11,7 @@ namespace DotNetRuleEngine.Interface
 
         bool IsReactive { get; set; }
 
-        bool IsPreactive { get; set; }
+        bool IsProactive { get; set; }
 
         bool IsExceptionHandler { get; set; }
 

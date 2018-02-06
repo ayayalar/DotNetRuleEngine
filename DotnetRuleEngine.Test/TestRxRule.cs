@@ -22,14 +22,14 @@ namespace DotnetRuleEngine.Test
         }
 
         [Fact]
-        public void TestPreactiveRules()
+        public void TestProactiveRules()
         {
             var product = new Product();
             var ruleEngineExecutor = RuleEngine<Product>.GetInstance(product);
-            ruleEngineExecutor.AddRules(new ProductRule(), new ProductPreactiveRule());
+            ruleEngineExecutor.AddRules(new ProductRule(), new ProductProactiveRule());
             var rr = ruleEngineExecutor.Execute();
-            Assert.True(rr.FindRuleResult<ProductPreactiveRule>().Data["Ticks"].To<long>() <= rr.FindRuleResult<ProductRule>().Data["Ticks"].To<long>(),
-                $"expected {rr.FindRuleResult<ProductPreactiveRule>().Data["Ticks"]} actual {rr.FindRuleResult<ProductRule>().Data["Ticks"]}");
+            Assert.True(rr.FindRuleResult<ProductProactiveRule>().Data["Ticks"].To<long>() <= rr.FindRuleResult<ProductRule>().Data["Ticks"].To<long>(),
+                $"expected {rr.FindRuleResult<ProductProactiveRule>().Data["Ticks"]} actual {rr.FindRuleResult<ProductRule>().Data["Ticks"]}");
         }
 
         [Fact]

@@ -5,11 +5,11 @@ using DotNetRuleEngine.Test.Models;
 
 namespace DotNetRuleEngine.Test.Rules
 {
-    internal class ProductPreactiveRule : Rule<Product>
+    internal class ProductProactiveRule : Rule<Product>
     {
         public override void Initialize()
         {
-            IsPreactive = true;
+            IsProactive = true;
             ObserveRule = typeof(ProductRule);
         }
 

@@ -46,7 +46,7 @@ namespace DotNetRuleEngine.Extensions
 
         public static RuleType GetRuleType<T>(this IGeneralRule<T> rule) where T : class, new()
         {
-            if (rule.IsPreactive) return RuleType.PreActiveRule;
+            if (rule.IsProactive) return RuleType.ProActiveRule;
             if (rule.IsReactive) return RuleType.ReActiveRule;
             if (rule.IsExceptionHandler) return RuleType.ExceptionHandlerRule;
 
@@ -57,7 +57,7 @@ namespace DotNetRuleEngine.Extensions
     public enum RuleType
     {
         None,
-        PreActiveRule,
+        ProActiveRule,
         ReActiveRule,
         ExceptionHandlerRule
     }
