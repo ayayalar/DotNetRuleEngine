@@ -11,17 +11,15 @@ namespace DotNetRuleEngine.Services
 {
     internal sealed class AsyncRuleService<T> where T : class, new()
     {
-        private readonly T _model;
         private readonly IList<IRuleAsync<T>> _rules;
         private readonly IRuleEngineConfiguration<T> _ruleEngineConfiguration;
         private readonly RxRuleService<IRuleAsync<T>, T> _rxRuleService;
         private readonly ConcurrentBag<IRuleResult> _asyncRuleResults = new ConcurrentBag<IRuleResult>();
         private readonly ConcurrentBag<Task<IRuleResult>> _parallelRuleResults = new ConcurrentBag<Task<IRuleResult>>();
 
-        public AsyncRuleService(T model, IList<IRuleAsync<T>> rules,
+        public AsyncRuleService(IList<IRuleAsync<T>> rules,
             IRuleEngineConfiguration<T> ruleEngineTerminated)
         {
-            _model = model;
             _rules = rules;
             _rxRuleService = new RxRuleService<IRuleAsync<T>, T>(_rules);
             _ruleEngineConfiguration = ruleEngineTerminated;
@@ -53,7 +51,7 @@ namespace DotNetRuleEngine.Services
             {
                 await InvokeNestedRulesAsync(rule.Configuration.InvokeNestedRulesFirst, rule);
 
-                if (rule.CanInvoke(_model, _ruleEngineConfiguration.IsRuleEngineTerminated()))
+                if (rule.CanInvoke() && !_ruleEngineConfiguration.IsRuleEngineTerminated())
                 {
                     try
                     {
@@ -100,7 +98,7 @@ namespace DotNetRuleEngine.Services
             {
                 await InvokeNestedRulesAsync(rule.Configuration.InvokeNestedRulesFirst, rule);
 
-                if (rule.CanInvoke(_model, _ruleEngineConfiguration.IsRuleEngineTerminated()))
+                if (rule.CanInvoke() && !_ruleEngineConfiguration.IsRuleEngineTerminated())
                 {
                     await InvokeProactiveRulesAsync(rule);
 

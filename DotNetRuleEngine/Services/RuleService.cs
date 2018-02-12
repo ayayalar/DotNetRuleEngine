@@ -8,16 +8,14 @@ namespace DotNetRuleEngine.Services
 {
     internal class RuleService<T> where T : class, new()
     {
-        private readonly T _model;
         private readonly IList<IRule<T>> _rules;
         private readonly IRuleEngineConfiguration<T> _ruleEngineConfiguration;
         private readonly RxRuleService<IRule<T>, T> _rxRuleService;
         private readonly ICollection<IRuleResult> _ruleResults = new List<IRuleResult>();
 
-        public RuleService(T model, IList<IRule<T>> rules,
+        public RuleService(IList<IRule<T>> rules,
             IRuleEngineConfiguration<T> ruleEngineConfiguration)
         {
-            _model = model;
             _rules = rules;
             _rxRuleService = new RxRuleService<IRule<T>, T>(_rules);
             _ruleEngineConfiguration = ruleEngineConfiguration;
@@ -33,7 +31,7 @@ namespace DotNetRuleEngine.Services
             {
                 InvokeNestedRules(rule.Configuration.InvokeNestedRulesFirst, rule);
 
-                if (rule.CanInvoke(_model, _ruleEngineConfiguration.IsRuleEngineTerminated()))
+                if (rule.CanInvoke() && !_ruleEngineConfiguration.IsRuleEngineTerminated())
                 {
                     InvokeProactiveRules(rule);
 
