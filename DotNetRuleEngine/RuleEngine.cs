@@ -65,14 +65,14 @@ namespace DotNetRuleEngine
         /// <returns></returns>
         public async Task<IRuleResult[]> ExecuteAsync()
         {
-            if (!_rules.Any()) return await _asyncRuleService.GetAsyncRuleResultsAsync();
+            if (!_rules.Any()) return Enumerable.Empty<IRuleResult>().ToArray();
 
             var rules = await new BootstrapService<T>(_model, _ruleEngineId, _dependencyResolver)
                 .BootstrapAsync(_rules);
 
             _asyncRuleService = new AsyncRuleService<T>(rules, _ruleEngineConfiguration);
 
-            await _asyncRuleService.InvokeAsyncRules();
+            await _asyncRuleService.InvokeAsync();
 
             return await _asyncRuleService.GetAsyncRuleResultsAsync();
         }
@@ -83,7 +83,7 @@ namespace DotNetRuleEngine
         /// <returns></returns>
         public IRuleResult[] Execute()
         {
-            if (!_rules.Any()) return _ruleService.GetRuleResults();
+            if (!_rules.Any()) return Enumerable.Empty<IRuleResult>().ToArray();
 
             var rules = new BootstrapService<T>(_model, _ruleEngineId, _dependencyResolver)
                 .Bootstrap(_rules);

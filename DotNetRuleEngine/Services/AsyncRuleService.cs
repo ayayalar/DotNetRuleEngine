@@ -25,7 +25,7 @@ namespace DotNetRuleEngine.Services
             _ruleEngineConfiguration = ruleEngineTerminated;
         }
 
-        public async Task InvokeAsyncRules()
+        public async Task InvokeAsync()
         {
             await ExecuteAsyncRules(_rxRuleService.FilterRxRules(_rules));
         }
