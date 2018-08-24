@@ -8,8 +8,8 @@ namespace DotNetRuleEngine.Extensions
 {
     internal static class InternalExtensions
     {
-        public static bool CanInvoke<T>(this IGeneralRule<T> rule, T model, bool terminated) where T : class, new() =>
-            !rule.Configuration.Skip && rule.Configuration.Constraint.Invoke2(model) && !terminated;
+        public static bool CanInvoke<T>(this IGeneralRule<T> rule) where T : class, new() =>
+            !rule.Configuration.Skip && rule.Configuration.Constraint.Invoke2(rule.Model);
 
         public static bool Invoke2<T>(this Predicate<T> predicate, T model) =>
             predicate == null || predicate(model);

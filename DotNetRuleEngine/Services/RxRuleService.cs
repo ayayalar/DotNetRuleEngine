@@ -65,7 +65,7 @@ namespace DotNetRuleEngine.Services
             {
                 if (predicate(r))
                 {
-                    rxRules.AddOrUpdate(r.ObserveRule, new List<TK> { r }, (type, list) =>
+                    rxRules.AddOrUpdate(r.ObservedRule, new List<TK> { r }, (type, list) =>
                    {
                        list.Add(r);
                        return list;

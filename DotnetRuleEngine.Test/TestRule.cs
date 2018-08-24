@@ -40,7 +40,7 @@ namespace DotnetRuleEngine.Test
             ruleEngineExecutor.AddRules(new ProductTerminateA(), new ProductTerminateB());
             var ruleResults = ruleEngineExecutor.Execute();
             var ruleResult = ruleResults.FindRuleResult("ProductRule");
-            Assert.Equal(1, ruleResults.Length);
+            Assert.Single(ruleResults);
             Assert.NotNull(ruleResult);
         }
 
@@ -59,7 +59,7 @@ namespace DotnetRuleEngine.Test
             var ruleEngineExecutor = RuleEngine<Product>.GetInstance(new Product());
             ruleEngineExecutor.AddRules(new ProductTerminateA(), new ProductTerminateB());
             var ruleResults = ruleEngineExecutor.Execute();
-            Assert.Equal(1, ruleResults.Length);
+            Assert.Single(ruleResults);
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace DotnetRuleEngine.Test
             var ruleEngineExecutor = RuleEngine<Product>.GetInstance(new Product());
             ruleEngineExecutor.AddRules(new ProductConstraintA(), new ProductConstraintB());
             var ruleResults = ruleEngineExecutor.Execute();
-            Assert.Equal(1, ruleResults.Length);
+            Assert.Single(ruleResults);
         }
 
         [Fact]

@@ -11,7 +11,7 @@ namespace DotNetRuleEngine.Test.AsyncRules
         public override Task InitializeAsync()
         {
             IsExceptionHandler = true;
-            ObserveRule = typeof(ProductExceptionThrownAsync);
+            ObserveRule<ProductExceptionThrownAsync>();
 
             return base.InitializeAsync();
         }

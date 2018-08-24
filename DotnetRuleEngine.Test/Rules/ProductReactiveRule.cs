@@ -10,7 +10,7 @@ namespace DotNetRuleEngine.Test.Rules
         public override void Initialize()
         {
             IsReactive = true;
-            ObserveRule = typeof(ProductRule);
+            ObserveRule<ProductRule>();
         }
 
         public override IRuleResult Invoke()

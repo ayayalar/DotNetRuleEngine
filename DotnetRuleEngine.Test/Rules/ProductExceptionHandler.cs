@@ -10,7 +10,7 @@ namespace DotNetRuleEngine.Test.Rules
         public override void Initialize()
         {
             IsExceptionHandler = true;
-            ObserveRule = typeof(ProductExceptionThrown);
+            ObserveRule<ProductExceptionThrown>();
         }
 
         public override IRuleResult Invoke()

@@ -8,6 +8,8 @@ namespace DotNetRuleEngine.Interface
 
         IParellelConfiguration<T> ParellelConfiguration { get; set; }
 
+        void ObserveRule<TK>() where TK : IRuleAsync<T>;
+
         Task InitializeAsync();
 
         Task BeforeInvokeAsync();

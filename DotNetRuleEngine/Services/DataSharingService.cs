@@ -38,8 +38,7 @@ namespace DotNetRuleEngine.Services
 
             while (DateTime.Now < timeout)
             {
-                Task<object> value;
-                AsyncData.Value.TryGetValue(keyPair.First(), out value);
+                AsyncData.Value.TryGetValue(keyPair.First(), out var value);
 
                 if (value != null) return await value;
             }
@@ -63,8 +62,7 @@ namespace DotNetRuleEngine.Services
 
             while (DateTime.Now < timeout)
             {
-                object value;
-                Data.Value.TryGetValue(keyPair.First(), out value);
+                Data.Value.TryGetValue(keyPair.First(), out var value);
 
                 if (value != null) return value;
             }

@@ -52,7 +52,7 @@ namespace DotnetRuleEngine.Test
 
             var ruleResults = ruleEngineExecutor.Execute();
 
-            Assert.Equal(0, ruleResults.Length);
+            Assert.Empty(ruleResults);
         }
     }
 }
