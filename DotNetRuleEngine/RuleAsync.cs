@@ -24,11 +24,11 @@ namespace DotNetRuleEngine
 
         public bool IsProactive { get; set; }
 
-        public Type ObserveRule { get; set; }
-
         public bool IsExceptionHandler { get; set; }
 
-        public bool IsGlobalExceptionHandler { get; set; }  
+        public bool IsGlobalExceptionHandler { get; set; }
+
+        public Type ObservedRule { get; private set; }
 
         public Exception UnhandledException { get; set; }
 
@@ -44,7 +44,9 @@ namespace DotNetRuleEngine
 
         public IList<object> GetRules() => Rules;
 
-        public void AddRules(params object[] rules) => Rules = rules.ToList();        
+        public void AddRules(params object[] rules) => Rules = rules.ToList();
+
+        public void ObserveRule<TK>() where TK : IRuleAsync<T> => ObservedRule = typeof(TK);        
 
         public virtual async Task InitializeAsync() => await Task.FromResult<object>(null);
 

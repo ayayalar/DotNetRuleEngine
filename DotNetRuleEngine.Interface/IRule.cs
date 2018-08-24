@@ -1,7 +1,9 @@
 ﻿namespace DotNetRuleEngine.Interface
 {
     public interface IRule<T> : IGeneralRule<T> where T : class, new()
-    {        
+    {
+        void ObserveRule<TK>() where TK : IRule<T>;
+
         void Initialize();
 
         void BeforeInvoke();

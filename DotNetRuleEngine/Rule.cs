@@ -19,11 +19,13 @@ namespace DotNetRuleEngine
 
         public bool IsProactive { get; set; }
 
-        public Type ObserveRule { get; set; }
+        public void ObserveRule<TK>() where TK: IRule<T> => ObservedRule = typeof(TK);
 
         public bool IsExceptionHandler { get; set; }
 
         public bool IsGlobalExceptionHandler { get; set; }
+
+        public Type ObservedRule { get; private set; }
 
         public Exception UnhandledException { get; set; }
 
