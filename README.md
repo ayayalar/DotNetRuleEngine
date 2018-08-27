@@ -12,7 +12,7 @@
 ```csharp
 PM> Install-Package DotNetRuleEngine.Core
 ```
-Nuget package available at: [DotNetRuleEngine.Core](https://www.nuget.org/packages/DotNetRuleEngine.Core "DotNetRuleEngine.Core")
+Nuget package available at: [DotNetRuleEngine.Core](https://www.nuget.org/packages/DotNetRuleEngine "DotNetRuleEngine.Core")
 
 
 Get Started at: [DotNetRuleEngine Wiki](https://github.com/ayayalar/DotNetRuleEngine/wiki)
