@@ -74,10 +74,10 @@ namespace DotNetRuleEngine.Services
                         {
                             var globalExceptionHandler = _rules.GetGlobalExceptionHandler();
 
-                            if (globalExceptionHandler is IRuleAsync<T>)
+                            if (globalExceptionHandler is IRuleAsync<T> ruleAsync)
                             {
                                 globalExceptionHandler.UnhandledException = exception;
-                                await ExecuteAsyncRules(new List<IRuleAsync<T>> { (IRuleAsync<T>)globalExceptionHandler });
+                                await ExecuteAsyncRules(new List<IRuleAsync<T>> { ruleAsync });
                             }
                             else
                             {
@@ -121,10 +121,10 @@ namespace DotNetRuleEngine.Services
                             {
                                 var globalExceptionHandler = _rules.GetGlobalExceptionHandler();
 
-                                if (globalExceptionHandler is IRuleAsync<T>)
+                                if (globalExceptionHandler is IRuleAsync<T> ruleAsync)
                                 {
                                     globalExceptionHandler.UnhandledException = exception;
-                                    await ExecuteAsyncRules(new List<IRuleAsync<T>> { (IRuleAsync<T>)globalExceptionHandler });
+                                    await ExecuteAsyncRules(new List<IRuleAsync<T>> { ruleAsync });
                                 }
                                 else
                                 {
@@ -135,9 +135,9 @@ namespace DotNetRuleEngine.Services
 
                         return ruleResult;
 
-                    }, rule.ParellelConfiguration.CancellationTokenSource?.Token ?? CancellationToken.None,
-                        rule.ParellelConfiguration.TaskCreationOptions,
-                        rule.ParellelConfiguration.TaskScheduler));
+                    }, rule.ParallelConfiguration.CancellationTokenSource?.Token ?? CancellationToken.None,
+                        rule.ParallelConfiguration.TaskCreationOptions,
+                        rule.ParallelConfiguration.TaskScheduler));
 
                     await InvokeReactiveRulesAsync(rule);
                 }
@@ -150,8 +150,8 @@ namespace DotNetRuleEngine.Services
         {
             await rule.BeforeInvokeAsync();
 
-            if (rule.IsParallel && rule.ParellelConfiguration.CancellationTokenSource != null &&
-                rule.ParellelConfiguration.CancellationTokenSource.Token.IsCancellationRequested)
+            if (rule.IsParallel && rule.ParallelConfiguration.CancellationTokenSource != null &&
+                rule.ParallelConfiguration.CancellationTokenSource.Token.IsCancellationRequested)
             {
                 return null;
             }

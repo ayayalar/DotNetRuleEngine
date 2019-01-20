@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>DotNetRuleEngine</id>
+    <version>4.0.1</version>
+    <title>DotNetRuleEngine</title>
+    <authors>Arif Yayalar</authors>
+    <owners>Arif Yayalar</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/ayayalar/DotNetRuleEngine</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/ayayalar/DotNetRuleEngine/master/DotNetRuleEngine.Core/Icon/icon_128.ico</iconUrl>
+    <description>DotNetRuleEngine allows you to write your business logic as series of rules to keep your code clean and structured.
+
+See doc. at https://github.com/ayayalar/DotNetRuleEngine/wiki</description>
+    <summary>Rule Based Software Development</summary>
+    <releaseNotes>upgraded to netstandard2.0</releaseNotes>
+    <copyright>MIT</copyright>
+  </metadata>
+</package>

@@ -6,7 +6,7 @@ namespace DotNetRuleEngine.Interface
     {
         bool IsParallel { get; set; }
 
-        IParellelConfiguration<T> ParellelConfiguration { get; set; }
+        IParallelConfiguration<T> ParallelConfiguration { get; set; }
 
         void ObserveRule<TK>() where TK : IRuleAsync<T>;
 

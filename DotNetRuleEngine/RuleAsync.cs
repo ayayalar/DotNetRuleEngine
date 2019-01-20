@@ -16,7 +16,7 @@ namespace DotNetRuleEngine
 
         public bool IsParallel { get; set; }
 
-        public IParellelConfiguration<T> ParellelConfiguration { get; set; } = new ParallelConfiguration<T>();
+        public IParallelConfiguration<T> ParallelConfiguration { get; set; } = new ParallelConfiguration<T>();
 
         public bool IsNested => Rules.Any();
 

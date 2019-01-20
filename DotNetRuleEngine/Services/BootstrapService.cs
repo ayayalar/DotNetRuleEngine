@@ -86,16 +86,16 @@ namespace DotNetRuleEngine.Services
             if (rule is RuleAsync<T> parallelRule && parallelRule.IsParallel &&
                 nestingRule is RuleAsync<T> nestingParallelRule)
             {
-                if (nestingParallelRule.ParellelConfiguration != null &&
-                    nestingParallelRule.ParellelConfiguration.NestedParallelRulesInherit)
+                if (nestingParallelRule.ParallelConfiguration != null &&
+                    nestingParallelRule.ParallelConfiguration.NestedParallelRulesInherit)
                 {
-                    var cancellationTokenSource = parallelRule.ParellelConfiguration.CancellationTokenSource;
-                    parallelRule.ParellelConfiguration = new ParallelConfiguration<T>
+                    var cancellationTokenSource = parallelRule.ParallelConfiguration.CancellationTokenSource;
+                    parallelRule.ParallelConfiguration = new ParallelConfiguration<T>
                     {
                         NestedParallelRulesInherit = true,
                         CancellationTokenSource = cancellationTokenSource,
-                        TaskCreationOptions = nestingParallelRule.ParellelConfiguration.TaskCreationOptions,
-                        TaskScheduler = nestingParallelRule.ParellelConfiguration.TaskScheduler
+                        TaskCreationOptions = nestingParallelRule.ParallelConfiguration.TaskCreationOptions,
+                        TaskScheduler = nestingParallelRule.ParallelConfiguration.TaskScheduler
                     };
                 }
             }
