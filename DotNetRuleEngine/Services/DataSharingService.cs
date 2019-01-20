@@ -24,8 +24,8 @@ namespace DotNetRuleEngine.Services
 
         public async Task AddOrUpdateAsync<T>(string key, Task<object> value, IConfiguration<T> configuration)
         {
-            var ruleengineId = GetRuleengineId(configuration);
-            var keyPair = BuildKey(key, ruleengineId);
+            var ruleEngineId = GetRuleEngineId(configuration);
+            var keyPair = BuildKey(key, ruleEngineId);
 
             await Task.FromResult(AsyncData.Value.AddOrUpdate(keyPair.First(), v => value, (k, v) => value));
         }
@@ -33,8 +33,8 @@ namespace DotNetRuleEngine.Services
         public async Task<object> GetValueAsync<T>(string key, IConfiguration<T> configuration, int timeoutInMs = DefaultTimeoutInMs)
         {
             var timeout = DateTime.Now.AddMilliseconds(timeoutInMs);
-            var ruleengineId = GetRuleengineId(configuration);
-            var keyPair = BuildKey(key, ruleengineId);
+            var ruleEngineId = GetRuleEngineId(configuration);
+            var keyPair = BuildKey(key, ruleEngineId);
 
             while (DateTime.Now < timeout)
             {
@@ -48,8 +48,8 @@ namespace DotNetRuleEngine.Services
 
         public void AddOrUpdate<T>(string key, object value, IConfiguration<T> configuration)
         {
-            var ruleengineId = GetRuleengineId(configuration);
-            var keyPair = BuildKey(key, ruleengineId);
+            var ruleEngineId = GetRuleEngineId(configuration);
+            var keyPair = BuildKey(key, ruleEngineId);
 
             Data.Value.AddOrUpdate(keyPair.First(), v => value, (k, v) => value);
         }
@@ -57,8 +57,8 @@ namespace DotNetRuleEngine.Services
         public object GetValue<T>(string key, IConfiguration<T> configuration, int timeoutInMs = DefaultTimeoutInMs)
         {
             var timeout = DateTime.Now.AddMilliseconds(timeoutInMs);
-            var ruleengineId = GetRuleengineId(configuration);
-            var keyPair = BuildKey(key, ruleengineId);
+            var ruleEngineId = GetRuleEngineId(configuration);
+            var keyPair = BuildKey(key, ruleEngineId);
 
             while (DateTime.Now < timeout)
             {
@@ -72,8 +72,8 @@ namespace DotNetRuleEngine.Services
 
         public static DataSharingService GetInstance() => DataManager.Value;
 
-        private static string[] BuildKey(string key, string ruleengineId) => new[] { string.Join("_", ruleengineId, key), key };
+        private static string[] BuildKey(string key, string ruleEngineId) => new[] { string.Join("_", ruleEngineId, key), key };
 
-        private static string GetRuleengineId<T>(IConfiguration<T> configuration) => ((RuleEngineConfiguration<T>)configuration).RuleEngineId.ToString();
+        private static string GetRuleEngineId<T>(IConfiguration<T> configuration) => ((RuleEngineConfiguration<T>)configuration).RuleEngineId.ToString();
     }
 }

@@ -4,7 +4,7 @@ using DotNetRuleEngine.Interface;
 
 namespace DotNetRuleEngine.Models
 {
-    public class ParallelConfiguration<T> : IParellelConfiguration<T> where T : class, new()
+    public class ParallelConfiguration<T> : IParallelConfiguration<T> where T : class, new()
     {
         public TaskCreationOptions TaskCreationOptions { get; set; } = TaskCreationOptions.None;
 
