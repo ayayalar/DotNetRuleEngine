@@ -9,12 +9,12 @@ namespace DotNetRuleEngine.Services
 {
     internal sealed class RxRuleService<TK, T> where T : class, new() where TK : IGeneralRule<T>
     {
-        private readonly IList<TK> _rules;
+        private readonly IEnumerable<TK> _rules;
         private readonly Lazy<ConcurrentDictionary<Type, IList<TK>>> _proactiveRules;
         private readonly Lazy<ConcurrentDictionary<Type, IList<TK>>> _reactiveRules;
         private readonly Lazy<ConcurrentDictionary<Type, IList<TK>>> _exceptionRules;
 
-        public RxRuleService(IList<TK> rules)
+        public RxRuleService(IEnumerable<TK> rules)
         {
             _rules = rules;
             _proactiveRules = new Lazy<ConcurrentDictionary<Type, IList<TK>>>(CreateProactiveRules, true);
@@ -23,13 +23,10 @@ namespace DotNetRuleEngine.Services
         }
 
         public ConcurrentDictionary<Type, IList<TK>> GetReactiveRules() => _reactiveRules.Value;
-
         public ConcurrentDictionary<Type, IList<TK>> GetProactiveRules() => _proactiveRules.Value;
-
         public ConcurrentDictionary<Type, IList<TK>> GetExceptionRules() => _exceptionRules.Value;
 
-
-        public IList<TK> FilterRxRules(IList<TK> rules)
+        public IList<TK> FilterRxRules(IEnumerable<TK> rules)
         {
             return rules.Where(r => !r.IsReactive && !r.IsProactive && !r.IsExceptionHandler && !r.IsGlobalExceptionHandler).ToList();
         }
@@ -58,7 +55,7 @@ namespace DotNetRuleEngine.Services
             return rxRules;
         }
 
-        private static void GetRxRules(IList<TK> rules,
+        private static void GetRxRules(IEnumerable<TK> rules,
             ConcurrentDictionary<Type, IList<TK>> rxRules, Predicate<TK> predicate)
         {
             Parallel.ForEach(rules, r =>
@@ -71,7 +68,7 @@ namespace DotNetRuleEngine.Services
                        return list;
                    });
                 }
-                if (r.IsNested) GetRxRules(r.GetRules().OfType<TK>().ToList(), rxRules, predicate);
+                if (r.IsNested) GetRxRules(r.GetRules().OfType<TK>(), rxRules, predicate);
             });
         }
     }

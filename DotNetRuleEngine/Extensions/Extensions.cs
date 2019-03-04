@@ -32,7 +32,15 @@ namespace DotNetRuleEngine.Extensions
             ruleResults.Where(r => string.Equals(r.Name, ruleName, StringComparison.OrdinalIgnoreCase));
 
         public static RuleEngine<T> ApplyRules<T>(this RuleEngine<T> ruleEngineExecutor,
-            params object[] rules) where T : class, new()
+            params IGeneralRule<T>[] rules) where T : class, new()
+        {
+            ruleEngineExecutor.AddRules(rules);
+
+            return ruleEngineExecutor;
+        }
+
+        public static RuleEngine<T> ApplyRules<T>(this RuleEngine<T> ruleEngineExecutor,
+            params Type[] rules) where T : class, new()
         {
             ruleEngineExecutor.AddRules(rules);
 

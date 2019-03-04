@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DotNetRuleEngine.Exceptions;
 using DotNetRuleEngine.Interface;
 using DotNetRuleEngine.Models;
 using DotNetRuleEngine.Services;
@@ -48,10 +49,38 @@ namespace DotNetRuleEngine
             };
 
         /// <summary>
-        /// Used to add rules to nestingRule engine.
+        /// Used to add rules to rule engine.
         /// </summary>
         /// <param name="rules">Rule(s) list.</param>
-        public void AddRules(params object[] rules) => _rules.AddRange(rules);
+        public void AddRules(params IGeneralRule<T>[] rules) => _rules.AddRange(rules);
+
+        /// <summary>
+        /// Used to add rules to rule engine.
+        /// </summary>
+        /// <param name="rules">Rule(s) list.</param>
+        public void AddRules(params Type[] rules)
+        {
+            foreach (var rule in rules)
+            {
+                if (!rule.IsSubclassOf(typeof(Rule<T>)) && !rule.IsSubclassOf(typeof(RuleAsync<T>)))
+                {
+                    throw new InvalidRuleObjectException($"{rule} is invalid. Must inherit from {nameof(Rule<T>)} or {nameof(RuleAsync<T>)}");
+                }
+            }
+
+            _rules.AddRange(rules);
+        }
+
+        /// <summary>
+        /// Used to add rule to rule engine.
+        /// </summary>
+        /// <param name="rule">Rule(s) list.</param>
+        public void AddRule(IGeneralRule<T> rule) => _rules.Add(rule);
+
+        /// <summary>
+        /// Used to add rule to rule engine.
+        /// </summary>
+        public void AddRule<TK>() where TK: IGeneralRule<T> => _rules.Add(typeof(TK));
 
         /// <summary>
         /// Used to set instance.
@@ -63,7 +92,7 @@ namespace DotNetRuleEngine
         /// Used to execute async rules.
         /// </summary>
         /// <returns></returns>
-        public async Task<IRuleResult[]> ExecuteAsync()
+        public async Task<IEnumerable<IRuleResult>> ExecuteAsync()
         {
             if (!_rules.Any()) return Enumerable.Empty<IRuleResult>().ToArray();
 
@@ -81,7 +110,7 @@ namespace DotNetRuleEngine
         /// Used to execute rules.
         /// </summary>
         /// <returns></returns>
-        public IRuleResult[] Execute()
+        public IEnumerable<IRuleResult> Execute()
         {
             if (!_rules.Any()) return Enumerable.Empty<IRuleResult>().ToArray();
 

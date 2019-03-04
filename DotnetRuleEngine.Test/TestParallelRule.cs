@@ -1,6 +1,7 @@
 ﻿using DotNetRuleEngine;
 using DotNetRuleEngine.Test.AsyncRules;
 using DotNetRuleEngine.Test.Models;
+using System.Linq;
 using Xunit;
 
 namespace DotnetRuleEngine.Test
@@ -40,7 +41,7 @@ namespace DotnetRuleEngine.Test
                 new ProductNestedParallelUpdateC());
 
             var ruleResults = ruleEngineExecutor.ExecuteAsync().Result;
-            Assert.Equal(8, ruleResults.Length);
+            Assert.Equal(8, ruleResults.Count());
         }
     }
 }

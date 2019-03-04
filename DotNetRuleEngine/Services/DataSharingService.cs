@@ -10,15 +10,20 @@ namespace DotNetRuleEngine.Services
 {
     internal sealed class DataSharingService
     {
-        private static readonly Lazy<DataSharingService> DataManager = new Lazy<DataSharingService>(() => new DataSharingService(), true);
+        private static readonly Lazy<DataSharingService> DataManager =
+            new Lazy<DataSharingService>(() => new DataSharingService(), true);
 
-        private DataSharingService() {}
+        private DataSharingService()
+        {
+        }
 
-        private Lazy<ConcurrentDictionary<string, Task<object>>> AsyncData { get; } = new Lazy<ConcurrentDictionary<string, Task<object>>>(
-            () => new ConcurrentDictionary<string, Task<object>>(), true);
+        private Lazy<ConcurrentDictionary<string, Task<object>>> AsyncData { get; } =
+            new Lazy<ConcurrentDictionary<string, Task<object>>>(
+                () => new ConcurrentDictionary<string, Task<object>>(), true);
 
-        private Lazy<ConcurrentDictionary<string, object>> Data { get; } = new Lazy<ConcurrentDictionary<string, object>>(
-           () => new ConcurrentDictionary<string, object>(), true);
+        private Lazy<ConcurrentDictionary<string, object>> Data { get; } =
+            new Lazy<ConcurrentDictionary<string, object>>(
+                () => new ConcurrentDictionary<string, object>(), true);
 
         internal const int DefaultTimeoutInMs = 15000;
 
@@ -30,7 +35,8 @@ namespace DotNetRuleEngine.Services
             await Task.FromResult(AsyncData.Value.AddOrUpdate(keyPair.First(), v => value, (k, v) => value));
         }
 
-        public async Task<object> GetValueAsync<T>(string key, IConfiguration<T> configuration, int timeoutInMs = DefaultTimeoutInMs)
+        public async Task<object> GetValueAsync<T>(string key, IConfiguration<T> configuration,
+            int timeoutInMs = DefaultTimeoutInMs)
         {
             var timeout = DateTime.Now.AddMilliseconds(timeoutInMs);
             var ruleEngineId = GetRuleEngineId(configuration);
@@ -72,8 +78,10 @@ namespace DotNetRuleEngine.Services
 
         public static DataSharingService GetInstance() => DataManager.Value;
 
-        private static string[] BuildKey(string key, string ruleEngineId) => new[] { string.Join("_", ruleEngineId, key), key };
+        private static string[] BuildKey(string key, string ruleEngineId) =>
+            new[] {string.Join("_", ruleEngineId, key), key};
 
-        private static string GetRuleEngineId<T>(IConfiguration<T> configuration) => ((RuleEngineConfiguration<T>)configuration).RuleEngineId.ToString();
+        private static string GetRuleEngineId<T>(IConfiguration<T> configuration) =>
+            ((RuleEngineConfiguration<T>) configuration).RuleEngineId.ToString();
     }
 }
