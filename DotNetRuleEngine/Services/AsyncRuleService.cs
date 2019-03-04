@@ -11,13 +11,13 @@ namespace DotNetRuleEngine.Services
 {
     internal sealed class AsyncRuleService<T> where T : class, new()
     {
-        private readonly IList<IRuleAsync<T>> _rules;
+        private readonly IEnumerable<IRuleAsync<T>> _rules;
         private readonly IRuleEngineConfiguration<T> _ruleEngineConfiguration;
         private readonly RxRuleService<IRuleAsync<T>, T> _rxRuleService;
         private readonly ConcurrentBag<IRuleResult> _asyncRuleResults = new ConcurrentBag<IRuleResult>();
         private readonly ConcurrentBag<Task<IRuleResult>> _parallelRuleResults = new ConcurrentBag<Task<IRuleResult>>();
 
-        public AsyncRuleService(IList<IRuleAsync<T>> rules,
+        public AsyncRuleService(IEnumerable<IRuleAsync<T>> rules,
             IRuleEngineConfiguration<T> ruleEngineTerminated)
         {
             _rules = rules;
@@ -30,7 +30,7 @@ namespace DotNetRuleEngine.Services
             await ExecuteAsyncRules(_rxRuleService.FilterRxRules(_rules));
         }
 
-        public async Task<IRuleResult[]> GetAsyncRuleResultsAsync()
+        public async Task<IEnumerable<IRuleResult>> GetAsyncRuleResultsAsync()
         {
             await Task.WhenAll(_parallelRuleResults);
 
@@ -40,10 +40,10 @@ namespace DotNetRuleEngine.Services
                 AddToAsyncRuleResults(rule.Result);
             });
 
-            return _asyncRuleResults.ToArray();
+            return _asyncRuleResults;
         }
 
-        private async Task ExecuteAsyncRules(IList<IRuleAsync<T>> rules)
+        private async Task ExecuteAsyncRules(IEnumerable<IRuleAsync<T>> rules)
         {
             await ExecuteParallelRules(rules);
 
@@ -207,7 +207,7 @@ namespace DotNetRuleEngine.Services
             if (ruleResult != null) _asyncRuleResults.Add(ruleResult);
         }
 
-        private static IEnumerable<IRuleAsync<T>> OrderByExecutionOrder(IList<IRuleAsync<T>> rules)
+        private static IEnumerable<IRuleAsync<T>> OrderByExecutionOrder(IEnumerable<IRuleAsync<T>> rules)
         {
             return rules.GetRulesWithExecutionOrder().OfType<IRuleAsync<T>>()
                     .Concat(rules.GetRulesWithoutExecutionOrder(rule => !((IRuleAsync<T>)rule).IsParallel).OfType<IRuleAsync<T>>());
@@ -216,8 +216,7 @@ namespace DotNetRuleEngine.Services
         private static IEnumerable<IRuleAsync<T>> GetParallelRules(IEnumerable<IRuleAsync<T>> rules)
         {
             return rules.Where(r => r.IsParallel && !r.Configuration.ExecutionOrder.HasValue)
-                .AsParallel()
-                .ToList();
+                .AsParallel();
         }
     }
 }

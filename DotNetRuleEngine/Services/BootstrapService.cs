@@ -58,9 +58,9 @@ namespace DotNetRuleEngine.Services
         private void InitializerAsync(IList<object> rules,
             ConcurrentBag<Task> initBag, IRuleAsync<T> nestingRule = null)
         {
-            for (var i = 0; i < rules.Count; i++)
+            for (var i = 0; i < rules.Count(); i++)
             {
-                var rule = ResolveRule<IRuleAsync<T>>(rules[i]);
+                var rule = ResolveRule<IRuleAsync<T>>(rules.ElementAt(i));
 
                 rules[i] = rule;
 

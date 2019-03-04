@@ -8,12 +8,12 @@ namespace DotNetRuleEngine.Services
 {
     internal class RuleService<T> where T : class, new()
     {
-        private readonly IList<IRule<T>> _rules;
+        private readonly IEnumerable<IRule<T>> _rules;
         private readonly IRuleEngineConfiguration<T> _ruleEngineConfiguration;
         private readonly RxRuleService<IRule<T>, T> _rxRuleService;
         private readonly ICollection<IRuleResult> _ruleResults = new List<IRuleResult>();
 
-        public RuleService(IList<IRule<T>> rules,
+        public RuleService(IEnumerable<IRule<T>> rules,
             IRuleEngineConfiguration<T> ruleEngineConfiguration)
         {
             _rules = rules;
@@ -23,9 +23,9 @@ namespace DotNetRuleEngine.Services
 
         public void Invoke() => Execute(_rxRuleService.FilterRxRules(_rules));
 
-        public IRuleResult[] GetRuleResults() => _ruleResults.ToArray();
+        public IEnumerable<IRuleResult> GetRuleResults() => _ruleResults;
 
-        private void Execute(IList<IRule<T>> rules)
+        private void Execute(IEnumerable<IRule<T>> rules)
         {
             foreach (var rule in OrderByExecutionOrder(rules))
             {
@@ -80,7 +80,7 @@ namespace DotNetRuleEngine.Services
         {
             if (_rxRuleService.GetReactiveRules().ContainsKey(rule.GetType()))
             {
-                Execute(_rxRuleService.GetReactiveRules()[rule.GetType()].ToList());
+                Execute(_rxRuleService.GetReactiveRules()[rule.GetType()]);
             }
         }
 
@@ -88,7 +88,7 @@ namespace DotNetRuleEngine.Services
         {
             if (_rxRuleService.GetProactiveRules().ContainsKey(rule.GetType()))
             {
-                Execute(_rxRuleService.GetProactiveRules()[rule.GetType()].ToList());
+                Execute(_rxRuleService.GetProactiveRules()[rule.GetType()]);
             }
         }
 
@@ -101,7 +101,7 @@ namespace DotNetRuleEngine.Services
                     return r;
                 });
 
-            Execute(exceptionRules.ToList());
+            Execute(exceptionRules);
         }
 
         private void AddToRuleResults(IRuleResult ruleResult, string ruleName)
@@ -114,15 +114,14 @@ namespace DotNetRuleEngine.Services
         {
             if (invokeNestedRules && rule.IsNested)
             {
-                Execute(_rxRuleService.FilterRxRules(OrderByExecutionOrder(rule.GetRules().OfType<IRule<T>>().ToList())));
+                Execute(_rxRuleService.FilterRxRules(OrderByExecutionOrder(rule.GetRules().OfType<IRule<T>>())));
             }
         }
 
-        private static IList<IRule<T>> OrderByExecutionOrder(IList<IRule<T>> rules)
+        private static IEnumerable<IRule<T>> OrderByExecutionOrder(IEnumerable<IRule<T>> rules)
         {
             return rules.GetRulesWithExecutionOrder().OfType<IRule<T>>()
-                .Concat(rules.GetRulesWithoutExecutionOrder().OfType<IRule<T>>())
-                .ToList();
+                .Concat(rules.GetRulesWithoutExecutionOrder().OfType<IRule<T>>());
         }
     }
 }
