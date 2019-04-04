@@ -1,10 +1,8 @@
-> **DotNetRuleEngine** allows you to write your code as series of rules to keep your code clean and structured. Supports both **synchronous** and **asynchronous** execution and it is **S.O.L.I.D** compliant.
+> DotNetRuleEngine allows you to write your code as series of rules to keep your code clean and structured. Supports both **synchronous** and **asynchronous** patterns and it adheres to **S.O.L.I.D** design principles.
 
 
 ### A few reasons use DotNetRuleEngine ###
-- S.O.L.I.D
-- Separation of Concern.
-- Easy to maintain.
+- Adheres to S.O.L.I.D
 - Testable code.
 - Encapsulates varying behavior. Such as business rules.
 
