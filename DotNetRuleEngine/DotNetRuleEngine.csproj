@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DotNetRuleEngine.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DotNetRuleEngine.nuspec">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DotNetRuleEngine.Interface\DotNetRuleEngine.Interface.csproj" />
   </ItemGroup>
 

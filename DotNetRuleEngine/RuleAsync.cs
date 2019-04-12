@@ -46,6 +46,10 @@ namespace DotNetRuleEngine
 
         public void AddRules(params object[] rules) => Rules = rules.ToList();
 
+        public void AddRule(IGeneralRule<T> rule) => Rules.Add(rule);
+
+        public void AddRule<TK>() where TK : IGeneralRule<T> => Rules.Add(typeof(TK));
+
         public void ObserveRule<TK>() where TK : IRuleAsync<T> => ObservedRule = typeof(TK);        
 
         public virtual async Task InitializeAsync() => await Task.FromResult<object>(null);

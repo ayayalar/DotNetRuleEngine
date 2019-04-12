@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/vsts/pipelines/apps/windows/dot-net
 
 pool:
-  vmImage: 'VS2017-Win2016'
+  vmImage: 'windows-2019'
 
 variables:
   solution: '**/*.sln'
@@ -12,19 +12,52 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+
 - task: NuGetToolInstaller@0
-
-- task: NuGetCommand@2
+  name: 'InstallNugetTools'
   inputs:
-    restoreSolution: '$(solution)'
+    versionSpec: '4.9.4'
+    checkLatest: true 
 
+- task: NuGetRestore@1
+  name: 'RestoreNugetPackages'
+  inputs:
+    includeNuGetOrg: true
+    solution: '$(solution)'    
+    
 - task: VSBuild@1
+  name: 'BuildSolution'
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
+  name: 'RunUnitTests'
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  name: 'Publish'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/DotNetRuleEngine.csproj'
+    arguments: '--output $(System.DefaultWorkingDirectory)/publish'
+    zipAfterPublish: false
+    modifyOutputPath: false
+
+- task: NuGetCommand@2
+  name: 'CreateNugetPackage'
+  inputs:
+    command: 'pack'
+    searchPatternPack: '$(System.DefaultWorkingDirectory)/publish/*.nuspec'
+    packDestination: '$(System.DefaultWorkingDirectory)/publish/nuget'
+  
+- task: PublishBuildArtifacts@1
+  name: 'PublishArtifacts'
+  inputs:    
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/publish/nuget'
+    ArtifactName: 'publish'
+

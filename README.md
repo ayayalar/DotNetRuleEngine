@@ -6,15 +6,16 @@
 - Testable code.
 - Encapsulates varying behavior. Such as business rules.
 
-
 ```csharp
 PM> Install-Package DotNetRuleEngine
 ```
 Nuget package available at: [DotNetRuleEngine](https://www.nuget.org/packages/DotNetRuleEngine "DotNetRuleEngine")
 
-
 Get Started at: [DotNetRuleEngine Wiki](https://github.com/ayayalar/DotNetRuleEngine/wiki)
 
+[![Build Status](https://dev.azure.com/ayayalar/ayayalar/_apis/build/status/ayayalar.DotNetRuleEngine?branchName=master)](https://dev.azure.com/ayayalar/ayayalar/_build/latest?definitionId=1&branchName=master)
+
+## Example
 
 #### Model
 

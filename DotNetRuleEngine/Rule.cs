@@ -49,6 +49,10 @@ namespace DotNetRuleEngine
             }
         }
 
+        public void AddRule(IGeneralRule<T> rule) => Rules.Add(rule);
+
+        public void AddRule<TK>() where TK : IGeneralRule<T> => Rules.Add(typeof(TK));
+
         public virtual void Initialize() { }
 
         public virtual void BeforeInvoke() { }

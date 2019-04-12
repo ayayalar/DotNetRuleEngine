@@ -28,5 +28,9 @@ namespace DotNetRuleEngine.Interface
         IList<object> GetRules();
 
         void AddRules(params object[] rules);
+
+        void AddRule(IGeneralRule<T> rule);
+
+        void AddRule<TK>() where TK : IGeneralRule<T>;
     }
 }
