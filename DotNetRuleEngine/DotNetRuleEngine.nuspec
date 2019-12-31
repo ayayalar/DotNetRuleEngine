@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>DotNetRuleEngine</id>
-    <version>4.0.7</version>
+    <version>4.0.8</version>
     <title>DotNetRuleEngine</title>
     <authors>Arif Yayalar</authors>
     <owners>Arif Yayalar</owners>
@@ -16,9 +16,7 @@
     </description>
     <summary>Rule Based Software Development</summary>
     <releaseNotes>
-      Added additional Rule/RuleAsync methods to add nested rules.
-
-      See updated usage in documentation https://github.com/ayayalar/DotNetRuleEngine/wiki/Nesting-Rules
+      Removed unused method GetServices from IDependencyResolver
     </releaseNotes>
     <copyright>MIT</copyright>
     <dependencies>
